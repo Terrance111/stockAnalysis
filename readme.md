@@ -1,0 +1,1 @@
+分功能区块写。core stock， market info，etc
