@@ -37,8 +37,6 @@ class AlphaVantageAPI:
             'foreignexchange': self.foreignexchange,
             'fundamentaldata': self.fundamentaldata,
         }
-        client = getattr(client_name,method)
-        
         client = clients.get(client_name)
         if client is None:
             raise ValueError(f"Client {client_name} does not exist.")
@@ -52,9 +50,36 @@ class AlphaVantageAPI:
         return method(*args, **kwargs)
 
     
-if __name__ == "__main__":
-    api = AlphaVantageAPI(api_key='1712GHWMXRW4HY3P')
-    df = api.call_method('timeseries', 'get_intraday', 'IBM', '5min')
-    print(df)
-    
 
+
+
+
+if __name__ == "__main__":
+    api = AlphaVantageAPI(api_key='6ZI495EUNAXCLI7T')
+    result = api.call_method('techindicators', 'get_atr', 'SPY')
+
+    
+    print("type(result):", type(result))
+    
+   
+    if isinstance(result, tuple):
+        data = result[0]
+    else:
+        data = result
+
+    print("type(data):", type(data))
+
+ 
+    if isinstance(data, dict):
+        df = pd.DataFrame.from_dict(data, orient='index')
+        df.columns = ['open', 'high', 'low', 'close', 'volume']
+        df.index = pd.to_datetime(df.index)
+        df.sort_index(inplace=True)
+        df.to_csv('spy_atr.csv')
+        print("保存成功：spy_intraday.csv")
+    elif isinstance(data, pd.DataFrame):
+      
+        data.to_csv('spy_atr.csv')
+        print("保存成功（原始就是 DataFrame）：spy_intraday.csv")
+    else:
+        print("无法识别的数据结构类型：", type(data))
