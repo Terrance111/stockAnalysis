@@ -56,7 +56,7 @@ class AlphaVantageAPI:
 
 if __name__ == "__main__":
     api = AlphaVantageAPI(api_key='6ZI495EUNAXCLI7T')
-    result = api.call_method('econindicators', 'get_treasury_yield', interval = 'daily',  maturity='2year')
+    result = api.call_method('econindicators', 'get_durables')
 
     
     print("type(result):", type(result))
@@ -75,11 +75,11 @@ if __name__ == "__main__":
         df.columns = ['open', 'high', 'low', 'close', 'volume']
         df.index = pd.to_datetime(df.index)
         df.sort_index(inplace=True)
-        df.to_csv('spy_ustreasury2.csv')
+        df.to_csv('spy_durables.csv')
         print("保存成功：spy_intraday.csv")
     elif isinstance(data, pd.DataFrame):
       
-        data.to_csv('spy_ustreasury2.csv')
+        data.to_csv('spy_durables.csv')
         print("保存成功（原始就是 DataFrame）：spy_intraday.csv")
     else:
         print("无法识别的数据结构类型：", type(data))
